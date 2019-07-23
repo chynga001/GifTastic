@@ -1,6 +1,6 @@
 $(document).ready(function () {
     var movies = ["New York", "Miami", "Baltimore","Chicago" ];
-
+	var movie = [];
 	// Add buttons for original movies array
 	function renderButtons() {
 		$("#movie-buttons").empty();
@@ -12,7 +12,8 @@ $(document).ready(function () {
             var a = $('<button>') 
             a.addClass('movie'); // add a class
             a.attr('data-movie', movies[i]); // add a data-attribute
-            a.text(movies[i]); // make button text
+			a.text(movies[i]); // make button text
+			movie.push(a);
             $('#movie-buttons').append(a); // append the button to buttonsView div
         }
         
@@ -21,18 +22,27 @@ $(document).ready(function () {
 	renderButtons();
 
 	// Adding a button for movie entered
-	$("#add-movie").on("click", function () {
+	$("#add-movie").on("click", function (event) {
 		event.preventDefault();
-		var movie = $("#movie-input").val().trim();
-		movies.push(movie);
-		renderButtons();
-		return;
+		// console.log(event)
+		movie = $("#movie-input").val().trim();
+		var b = $('<button>') 
+		b.addClass('movie'); // add a class
+		b.attr('data-movie', movie); // add a data-attribute
+		b.text(movie); // make button text
+		// movie.push(a);
+		$('#movie-buttons').append(b);
+		// movies.push(movie);
+		// $('#movie-buttons').append(movie);
+		// renderButtons();
+		// return;
 	});
 
 
 	// Getting gifs from api... onto html
-	$("button").on("click", function () {
-		var movie = $(this).attr("data-movie");
+	$("#movie-buttons").on("click", function (event) {
+		console.log(event)
+		var movie = $(event.target).attr("data-movie");
 		var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
 			movie + "&api_key=VUyrDCYI9BaLHto1DiocGfqlbwnrEHny&limit=10"
             // VUyrDCYI9BaLHto1DiocGfqlbwnrEHny
@@ -44,7 +54,7 @@ $(document).ready(function () {
 			var results = response.data;
 			$("#movies").empty();
 			for (var i = 0; i < results.length; i++) {
-				var movieDiv = $("<div>");
+				var movieDiv = $('<div style="float:left;" width="" >' );
 				var p = $("<p>").text("Rating: " + results[i].rating);
 				var movieImg = $("<img>");
 
@@ -76,16 +86,14 @@ $(document).ready(function () {
 		}
 	}
 
-	// $("img").on("click", function() {
-	// 	console.log("click worked!");
-	// 	var src = movieImg.attr(src);
-	// 	src = src.substring(0, src.length - 10);
-	// 	src += ".url";
-	// 	console.log(src);
-	// 	movieImg.attr("src", src);
-	// });
-
-	// $(document).on("click", "#input", displayImg);
+	
 	$(document).on("click", ".gif", changeState);
 
 });
+
+
+
+
+
+
+
